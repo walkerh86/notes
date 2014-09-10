@@ -1,0 +1,45 @@
+ubuntu开启远程桌面：
+1、sudo apt-get install xrdp
+2、系统->首选项->远程桌面，勾选 “允许其他人查看您的桌面”，“允许其他用户控制您的桌面”
+----------------------------------------------------------------------------------------
+ubuntu git服务器：
+1、安装git
+  sudo apt-get install git-core  
+2、添加用户
+  sudo useradd -m add
+  sudo passwd git
+3、安装gitosis
+  git config –global user.name “myname”
+  git config –global user.email “myname@server“
+  cd /tmp
+  git clone https://github.com/res0nat0r/gitosis.git
+  cd gitosis
+  sudo python setup.py install
+4、配置gitosis
+  ssh-keygen -t rsa 过程中一直回车
+  将生成的.ssh/id_rsa.pub复制到/tmp目录
+  sudo -H -u git gitosis-init < /tmp/id_rsa.pub
+  sudo chmod 755 /home/git/repositories/gitosis-admin.git/hooks/post-update
+  
+  在生成ssh key的机器上clone
+  git clone git@10.0.0.25:gitosis-admin
+  将所有用户的key放入keydir目录，修改conf文件
+  git commit -am""
+  git push
+----------------------------------------------------------------------------------------
+putty
+1、免密码登录
+   新建putty.exe的快捷方式，右键快捷方式，目标设置如下
+   C:\hcj\tools\putty_V0.63.0.0.43510830.exe -pw * twd@10.0.0.25
+2、2分钟掉线问题：
+   然后修改服务器中/etc/ssh/sshd.config 文件，将LoginGraceTime的值设为0,默认为2m，
+   TCPKeepAlive 设为yes, 然后使用service sshd restart来重启sshd服务
+----------------------------------------------------------------------------------------
+UltraEdit
+1、禁止弹出DOS转换对话框
+   高级->配置->常规->加载/保存/转换->选择禁用转换
+2、修改默认背景颜色
+   高级->配置->语法着色->非语法着色->背景
+3、高级->配置->备份->选择不进行备份
+----------------------------------------------------------------------------------------
+  
