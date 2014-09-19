@@ -1,4 +1,6 @@
 重力感应：
 1、界面旋转支持4个方向(默认3个)：
   framework/base/core/res/res/value/config.xml  config_allowAllRotations -> true
----------------------------------------------------------------------------------
+2、锁屏界面支持转屏
+  framework/base/core/res/res/value/config.xml  config_enableLockScreenRotation -> true
+----------------------------------------------------------------------------------------

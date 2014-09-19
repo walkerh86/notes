@@ -1,0 +1,13 @@
+CUSTOM_LK_LCM=puqing_lvds_sn74avc24t245_wvga
+
+BOOT_LOGO=wvgalnl
+
+CUSTOM_KERNEL_LCM=puqing_lvds_sn74avc24t245_wvga
+
+CUSTOM_UBOOT_LCM=puqing_lvds_sn74avc24t245_wvga
+
+LCM_HEIGHT=480
+
+LCM_WIDTH=800
+
+CUSTOM_KERNEL_TOUCHPANEL=puqing_gsl3680
