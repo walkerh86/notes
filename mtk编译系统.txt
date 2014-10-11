@@ -1,14 +1,14 @@
 makefile语法部分可以参考 http://blog.csdn.net/liang13664759/article/details/1771246
-
+------------------------------------------------------------------------------------
 mediatek/build/libs/config.mk
 主要生成mediatek/config/out/xxx/ProjectConfig.mk, 此ProjectConfig.mk由mediatek/config/xxx/ProjectConfig.mk通过mediatek/build/tools/config/merge-project.py生成，然后会被include进mediatek/build/makemtk.mk
-
+------------------------------------------------------------------------------------
 Android.mk文件搜索规则
 main.mk中当前编译如果不是编译模块的话则会通过build/tools/findleaves.py搜索整个工程的Android.mk，搜索到每个目录，
 如果该目录出现Android.mk文件则不继续搜索子目录，参考脚本以下代码
 result.append(os.path.join(root, filename)) #添加该mk文件
 del dirs[:]  #阻止往下级目录扫描
-
+------------------------------------------------------------------------------------
 remake流程
 1、mediatek/build/makeMtk      &p_system("$makeCmd ${uAct}all");
 2、mediatek/build/makemtk.mk   
@@ -29,15 +29,14 @@ new流程
 	clean->
 	codegen->
 	remake
-
+------------------------------------------------------------------------------------
 mtk android编译原理：
   mtk在原生android编译系统上添加了mtk的编译机制，主要是在编译android前后做些mtk自己的处理，主要添加了preloader,lk
 kernel几个模块，这些主要在文件mediatek/build/makeMtk和mediatek/build/makemtk.mk中处理，编译android模块时会进入原生
 android编译流程，入口是build/core/main.mk文件。main.mk文件先初始化一些变量，然后通过变量ONE_SHOT_MAKEFILE来判断是不是
 模块编译，如果是则只编译该模块，如果是完整编译则遍历工程目录，找出所有的Android.mk文件并include，然后将所有需要编译
 的模块放入一个列表，最后找到系统需要生成的目标开始编译。
-
-
+------------------------------------------------------------------------------------
 快速编译Android模块：
 如果工程没有编译过，可以使用./mk r dr xxx来单独编译模块，该方法通过分析模块的Android.mk文件来推导模块的依赖关系，并
 首先将所以的依赖模块编译完成。如果工程已经编译过，则可以通过模块的Android.mk文件分析出模块依赖的需要更新的模块，然后
@@ -55,7 +54,13 @@ STEP4：重启手机即可
 ./mk mm mediatek/platform/mt6572/hardware/camera/common/paramsmgr -> (libcam.paramsmgr)
 adb push libcam.paramsmgr.so system/lib ->
 重启手机即可
-
-
+------------------------------------------------------------------------------------
+编译系统定义C/C++全局宏定义：
+方法1：ProjectConfig.mk中修改AUTO_ADD_GLOBAL_DEFINE_BY_NAME，AUTO_ADD_GLOBAL_DEFINE_BY_NAME_VALUE，
+				AUTO_ADD_GLOBAL_DEFINE_BY_VALUE
+			例如mediatek/custom/common/lk/include/target/cust_display.h中用到的WVGA/HD720等宏就是通过
+			AUTO_ADD_GLOBAL_DEFINE_BY_VALUE = BOOT_LOGO实现
+方法2：在需要修改的makefile文件中修改全局变量MTK_CFLAGS，MTK_CDEFS
+------------------------------------------------------------------------------------
 
 
