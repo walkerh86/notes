@@ -4,3 +4,6 @@
 2、锁屏界面支持转屏
   framework/base/core/res/res/value/config.xml  config_enableLockScreenRotation -> true
 ----------------------------------------------------------------------------------------
+语言：
+1、如何去掉插SIM卡后系统自动切换语言：
+  PRODUCT_PROPERTY_OVERRIDES += persist.sys.language = ru persist.sys.country = RU
