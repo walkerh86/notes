@@ -151,9 +151,31 @@ def check_fat_img(src_fat_img,dst_dir):
     dst_img = os.path.join(dst_dir,img_name)
     if os.path.exists(src_fat_img) and (not os.path.exists(dst_img)):
         cp_one_file(src_fat_img,dst_dir)
+
+    if not os.path.exists(dst_img):
+        return
+    
     dst_scatter_fp = os.path.join(dst_dir,'MT6572_Android_scatter.txt')
-    if os.path.exists(dst_img) and os.path.exists(dst_scatter_fp):
-        do_cmd(' '.join(['copy',SCATTER_WITH_FAT_FP,dst_scatter_fp]))
+    tmp_scatter_fp = os.path.join(dst_dir,'MT6572_Android_scatter_tmp.txt')
+    dst_scatter_f = open(dst_scatter_fp)
+    tmp_scatter_f = open(tmp_scatter_fp,'w')
+    fat_begin = False
+    for line in dst_scatter_f:
+        #print 'line='+line+',fat_begin='+str(fat_begin)
+        if line.startswith('  partition_name: FAT'):
+            fat_begin = True
+        elif fat_begin and line.startswith('  file_name:'):
+            tmp_scatter_f.write('  file_name: fat_sparse.img\n')
+            continue
+        elif fat_begin and line.startswith('  is_download:'):
+            tmp_scatter_f.write('  is_download: true\n')
+            fat_begin = False
+            continue
+        tmp_scatter_f.write(line)
+    dst_scatter_f.close()
+    tmp_scatter_f.close()
+    os.remove(dst_scatter_fp)
+    os.rename(tmp_scatter_fp,dst_scatter_fp)
    
 def check_build_version(prj_path,dl_path):
     build_prop_file = os.path.join(prj_path,"system",'build.prop')
